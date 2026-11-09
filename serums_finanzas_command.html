@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SERUMS FINANZAS | Dr. Luis Aguilar</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons 6.5.1 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts: Cabin Only -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Regla global estricta: 100% Tipografía Cabin */
+        *, body, h1, h2, h3, h4, h5, h6, input, select, textarea, button, table, th, td, label, span, div, p, a {
+            font-family: 'Cabin', system-ui, -apple-system, sans-serif !important;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        /* Scrollbar estilizado sutil */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #0284c7; }
+
+        .nav-link-active {
+            background-color: #0284c7 !important;
+            color: #ffffff !important;
+            font-weight: 700;
+            box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.25);
+        }
+
+        .touch-target {
+            min-height: 44px;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col antialiased bg-slate-50 text-slate-900">
+
+    <!-- BARRA SUPERIOR DE NAVEGACIÓN -->
+    <header class="bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-30 shrink-0 shadow-sm">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            
+            <!-- Marca / Título -->
+            <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-sky-600 text-white flex items-center justify-center text-lg shadow-md shadow-sky-200">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-base text-slate-900 leading-tight flex items-center gap-2">
+                            SERUMS FINANZAS
+                            <span class="text-[10px] bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">v5.0 Lean</span>
+                        </h1>
+                        <p class="text-xs text-slate-500 font-medium">Dr. Luis Aguilar • P.S. Paucamarca</p>
+                    </div>
+                </div>
+
+                <!-- Toggle Sidebar Móvil -->
+                <button onclick="toggleMobileNav()" class="sm:hidden p-2 text-slate-600 hover:text-slate-900 rounded-xl border border-slate-200">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Botones de Sincronización Rápida -->
+            <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
+                <button onclick="openSyncModal()" title="Sincronización por WhatsApp/Texto" class="touch-target px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center space-x-2 shadow-sm transition-all active:scale-95">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>Sync WhatsApp</span>
+                </button>
+
+                <button onclick="exportJSON()" title="Descargar Copia de Seguridad JSON" class="touch-target px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-300 flex items-center space-x-1.5 transition-all">
+                    <i class="fa-solid fa-download text-sky-600"></i>
+                    <span class="hidden md:inline">Exportar JSON</span>
+                </button>
+
+                <label title="Cargar Copia de Seguridad JSON" class="touch-target px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-300 flex items-center space-x-1.5 cursor-pointer transition-all">
+                    <i class="fa-solid fa-upload text-purple-600"></i>
+                    <span class="hidden md:inline">Importar</span>
+                    <input type="file" id="jsonInputFile" onchange="importJSON(event)" accept=".json,text/plain" class="hidden">
+                </label>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- ESTRUCTURA PRINCIPAL DE 2 COLUMNAS -->
+    <div class="max-w-7xl mx-auto w-full flex-1 flex flex-col md:flex-row min-h-0 overflow-hidden">
+
+        <!-- NAVEGACIÓN LATERAL (COLUMNA 1) -->
+        <aside id="sidebarNav" class="w-full md:w-64 bg-white border-r border-slate-200 p-4 shrink-0 space-y-4 hidden sm:block">
+            
+            <nav class="space-y-1.5">
+                <button onclick="switchView('v-dashboard')" id="btn-v-dashboard" class="nav-btn nav-link-active w-full flex items-center space-x-3 px-3.5 py-3 rounded-2xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition-all touch-target">
+                    <i class="fa-solid fa-chart-pie text-sm w-5"></i>
+                    <span>Resumen & Balance</span>
+                </button>
+
+                <button onclick="switchView('v-registro')" id="btn-v-registro" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-2xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition-all touch-target">
+                    <i class="fa-solid fa-plus-circle text-sm w-5"></i>
+                    <span>Nueva Transacción</span>
+                </button>
+
+                <button onclick="switchView('v-historial')" id="btn-v-historial" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-2xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition-all touch-target">
+                    <i class="fa-solid fa-list-check text-sm w-5"></i>
+                    <span>Historial de Gastos</span>
+                </button>
+
+                <button onclick="switchView('v-recurrentes')" id="btn-v-recurrentes" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-2xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition-all touch-target">
+                    <i class="fa-solid fa-calendar-check text-sm w-5"></i>
+                    <span>Pagos Fijos Recurrentes</span>
+                </button>
+            </nav>
+
+            <!-- METRO DE TASA DE AHORRO -->
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
+                <div class="flex items-center justify-between text-xs font-bold">
+                    <span class="text-slate-600">Tasa de Ahorro</span>
+                    <span id="sidebarSavingsRate" class="text-emerald-600">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                    <div id="sidebarSavingsBar" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p class="text-[11px] text-slate-500 leading-tight">Calculado sobre el sueldo de tu servicio SERUMS.</p>
+            </div>
+
+            <!-- FICHA INFORMATIVA -->
+            <div class="p-3 bg-sky-50 rounded-2xl border border-sky-100 text-xs space-y-1">
+                <div class="font-bold text-sky-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-shield-halved text-sky-600"></i>
+                    <span>100% Privado & Offline</span>
+                </div>
+                <p class="text-[11px] text-sky-700">Tus registros financieros se guardan únicamente en tu dispositivo.</p>
+            </div>
+
+        </aside>
+
+        <!-- ÁREA DE CONTENIDO (COLUMNA 2) -->
+        <main class="flex-1 bg-white p-4 sm:p-6 overflow-y-auto min-w-0">
+
+            <!-- ================= VISTA 1: DASHBOARD DE RESUMEN ================= -->
+            <section id="v-dashboard" class="view-panel space-y-6">
+                
+                <!-- TARJETAS DE RESUMEN FINANCIERO -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    
+                    <!-- Balance Neto -->
+                    <div class="bg-gradient-to-br from-sky-500 to-sky-600 p-5 rounded-3xl text-white shadow-md shadow-sky-100 space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-sky-100">Balance Libre</span>
+                            <i class="fa-solid fa-vault text-sky-200 text-lg"></i>
+                        </div>
+                        <div id="cardNetBalance" class="text-2xl sm:text-3xl font-extrabold">S/ 0.00</div>
+                        <p class="text-[11px] text-sky-100">Disponible para ahorro o inversión</p>
+                    </div>
+
+                    <!-- Ingresos Totales -->
+                    <div class="bg-slate-50 border border-slate-200 p-5 rounded-3xl space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Ingresos Totales</span>
+                            <i class="fa-solid fa-arrow-down-left text-emerald-600 text-lg"></i>
+                        </div>
+                        <div id="cardTotalIncome" class="text-2xl font-bold text-emerald-600">S/ 0.00</div>
+                        <p class="text-[11px] text-slate-400">Sueldo MINSA + extras</p>
+                    </div>
+
+                    <!-- Gastos Totales -->
+                    <div class="bg-slate-50 border border-slate-200 p-5 rounded-3xl space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Gastos Acumulados</span>
+                            <i class="fa-solid fa-arrow-up-right text-rose-600 text-lg"></i>
+                        </div>
+                        <div id="cardTotalExpense" class="text-2xl font-bold text-rose-600">S/ 0.00</div>
+                        <p class="text-[11px] text-slate-400">Egresos registrados</p>
+                    </div>
+
+                    <!-- Porcentaje Ahorrado -->
+                    <div class="bg-slate-50 border border-slate-200 p-5 rounded-3xl space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">% Ahorrado</span>
+                            <i class="fa-solid fa-piggy-bank text-amber-500 text-lg"></i>
+                        </div>
+                        <div id="cardSavingsPct" class="text-2xl font-bold text-amber-600">0.0%</div>
+                        <p class="text-[11px] text-slate-400">Eficiencia presupuestal</p>
+                    </div>
+
+                </div>
+
+                <!-- GRÁFICOS Y DISTRIBUCIÓN -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Canvas Doughnut / Pie Chart -->
+                    <div class="bg-slate-50 border border-slate-200 p-5 rounded-3xl space-y-3">
+                        <h3 class="font-bold text-xs uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-sky-600"></i> Distribución Visual de Gastos
+                        </h3>
+                        <div class="h-56 flex items-center justify-center relative">
+                            <canvas id="financeCanvas" class="max-h-full max-w-full"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Barras de Progreso por Categoría -->
+                    <div class="bg-slate-50 border border-slate-200 p-5 rounded-3xl space-y-4 lg:col-span-2">
+                        <h3 class="font-bold text-xs uppercase tracking-wider text-slate-700 border-b border-slate-200 pb-2">
+                            Desglose por Categorías Presupuestales
+                        </h3>
+                        <div id="dashCategoryBars" class="space-y-3">
+                            <!-- JS Populated -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RESUMEN DE PRÓXIMOS PAGOS FIJOS -->
+                <div class="bg-slate-50 border border-slate-200 p-5 rounded-3xl space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-xs uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-bell text-rose-500"></i> Recordatorios de Pagos Próximos
+                        </h3>
+                        <button onclick="switchView('v-recurrentes')" class="text-xs text-sky-600 hover:underline font-bold">Gestionar Recurrentes &rarr;</button>
+                    </div>
+                    <div id="dashUpcomingPaymentsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <!-- JS Populated -->
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ================= VISTA 2: NUEVA TRANSACCIÓN ================= -->
+            <section id="v-registro" class="view-panel hidden space-y-6 max-w-2xl">
+                
+                <div class="bg-slate-50 border border-slate-200 p-6 rounded-3xl space-y-5">
+                    <div>
+                        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-plus-circle text-emerald-600"></i> Registrar Nueva Transacción
+                        </h2>
+                        <p class="text-xs text-slate-500">Añade un ingreso o gasto a tu control financiero SERUMS</p>
+                    </div>
+
+                    <form onsubmit="handleNewTransaction(event)" class="space-y-4">
+                        
+                        <!-- Tipo: Ingreso / Gasto -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="txType" value="expense" checked class="peer hidden" onchange="updateCategoryOptions()">
+                                <div class="touch-target border border-slate-300 rounded-2xl p-3 text-center peer-checked:border-rose-500 peer-checked:bg-rose-50 peer-checked:text-rose-700 font-bold text-xs transition-all flex items-center justify-center space-x-2">
+                                    <i class="fa-solid fa-arrow-up-right"></i>
+                                    <span>Gasto (-)</span>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer">
+                                <input type="radio" name="txType" value="income" class="peer hidden" onchange="updateCategoryOptions()">
+                                <div class="touch-target border border-slate-300 rounded-2xl p-3 text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700 font-bold text-xs transition-all flex items-center justify-center space-x-2">
+                                    <i class="fa-solid fa-arrow-down-left"></i>
+                                    <span>Ingreso (+)</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Monto y Fecha -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Monto en Soles (S/)</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-2.5 text-xs font-bold text-slate-400">S/</span>
+                                    <input type="number" id="txAmount" step="0.10" required placeholder="0.00" class="w-full bg-white text-slate-900 text-sm font-bold pl-8 pr-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Fecha</label>
+                                <input type="date" id="txDate" required class="w-full bg-white text-slate-900 text-xs px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Categoría -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Categoría Presupuestal</label>
+                            <select id="txCategory" class="w-full bg-white text-slate-900 text-xs px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:outline-none font-medium">
+                                <!-- Populated dynamically by JS -->
+                            </select>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Descripción / Detalle</label>
+                            <input type="text" id="txDescription" required placeholder="Ej. Cuarto Paucamarca / Plan Bitel / Menú" class="w-full bg-white text-slate-900 text-xs px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-2xl shadow-md transition-all active:scale-95 flex items-center justify-center space-x-2 touch-target">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Guardar Registro Financiero</span>
+                        </button>
+                    </form>
+                </div>
+
+            </section>
+
+            <!-- ================= VISTA 3: HISTORIAL & FILTROS ================= -->
+            <section id="v-historial" class="view-panel hidden space-y-5">
+                
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+                    <div>
+                        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-sky-600"></i> Historial de Movimientos
+                        </h2>
+                        <p class="text-xs text-slate-500">Consulta y filtra tus registros de ingresos y egresos</p>
+                    </div>
+
+                    <button onclick="clearAllTransactions()" class="text-xs text-rose-600 hover:text-rose-800 font-bold border border-rose-200 bg-rose-50 px-3 py-1.5 rounded-xl transition-all">
+                        <i class="fa-solid fa-trash-can"></i> Limpiar Todo
+                    </button>
+                </div>
+
+                <!-- Barra de Filtros -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                    <div>
+                        <input type="text" id="filterSearch" onkeyup="renderHistoryTable()" placeholder="Buscar por descripción..." class="w-full bg-white text-xs text-slate-900 px-3 py-2 rounded-xl border border-slate-300">
+                    </div>
+                    <div>
+                        <select id="filterType" onchange="renderHistoryTable()" class="w-full bg-white text-xs text-slate-900 px-3 py-2 rounded-xl border border-slate-300">
+                            <option value="all">Todos los tipos (Ingresos/Gastos)</option>
+                            <option value="expense">Solo Gastos (-)</option>
+                            <option value="income">Solo Ingresos (+)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select id="filterCategory" onchange="renderHistoryTable()" class="w-full bg-white text-xs text-slate-900 px-3 py-2 rounded-xl border border-slate-300">
+                            <option value="all">Todas las categorías</option>
+                            <option value="Alimentación / Cuarto">Alimentación / Cuarto Paucamarca</option>
+                            <option value="Transporte">Transporte (Cajamarca/San Marcos)</option>
+                            <option value="Bitel / Servicios">Bitel / Servicios</option>
+                            <option value="Cursos & Estudio RM">Cursos & Estudio RM</option>
+                            <option value="Salud & Personal">Salud & Personal</option>
+                            <option value="Gustos / Varios">Gustos / Varios</option>
+                            <option value="Sueldo SERUMS MINSA">Sueldo SERUMS MINSA</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tabla Interactiva -->
+                <div class="overflow-x-auto bg-white rounded-2xl border border-slate-200">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-100 text-slate-600 font-bold uppercase text-[10px] border-b border-slate-200">
+                            <tr>
+                                <th class="py-3 px-4">Fecha</th>
+                                <th class="py-3 px-4">Descripción</th>
+                                <th class="py-3 px-4">Categoría</th>
+                                <th class="py-3 px-4 text-right">Monto (S/)</th>
+                                <th class="py-3 px-4 text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody" class="divide-y divide-slate-200">
+                            <!-- JS Populated -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+
+            <!-- ================= VISTA 4: PAGOS FIJOS RECURRENTES ================= -->
+            <section id="v-recurrentes" class="view-panel hidden space-y-6">
+                
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+                    <div>
+                        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-check text-purple-600"></i> Pagos Fijos Recurrentes (Calendario)
+                        </h2>
+                        <p class="text-xs text-slate-500">Configura gastos fijos periódicos para no olvidar fechas límite</p>
+                    </div>
+
+                    <button onclick="openAddRecurringModal()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center space-x-1.5 touch-target">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Nuevo Pago Recurrente</span>
+                    </button>
+                </div>
+
+                <!-- Lista de Pagos Fijos Configurados -->
+                <div id="recurringPaymentsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- JS Populated -->
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <!-- MODAL: AGREGAR PAGO RECURRENTE -->
+    <div id="modalAddRecurring" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-bell text-purple-600"></i> Agregar Pago Fijo Recurrente
+                </h3>
+                <button onclick="closeAddRecurringModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <form onsubmit="handleSaveRecurring(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Nombre / Concepto</label>
+                    <input type="text" id="recTitle" required placeholder="Ej. Alquiler Cuarto Paucamarca" class="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-xl border border-slate-300">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Monto Estimado (S/)</label>
+                    <input type="number" step="0.5" id="recAmount" required placeholder="150" class="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-xl border border-slate-300">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Día de Vencimiento Mensual (1-31)</label>
+                    <input type="number" min="1" max="31" id="recDay" required placeholder="15" class="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-xl border border-slate-300">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Categoría</label>
+                    <select id="recCat" class="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-xl border border-slate-300">
+                        <option value="Alimentación / Cuarto">Alimentación / Cuarto</option>
+                        <option value="Bitel / Servicios">Bitel / Servicios</option>
+                        <option value="Cursos & Estudio RM">Cursos & Estudio RM</option>
+                        <option value="Otros">Otros</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">
+                    Guardar Recordatorio Fijo
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE PROGRESO DE CARGA CON PORCENTAJE (0% AL 100%) -->
+    <div id="syncProgressModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
+            <div class="w-14 h-14 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center mx-auto text-2xl font-bold">
+                <i class="fa-solid fa-arrows-rotate animate-spin" id="syncSpinIcon"></i>
+            </div>
+            
+            <div>
+                <h3 class="text-base font-bold text-slate-900" id="syncProgressTitle">Sincronizando Finanzas...</h3>
+                <p class="text-xs text-slate-500 mt-1" id="syncProgressSubtitle">Actualizando registros financieros en este dispositivo.</p>
+            </div>
+
+            <!-- Barra de Progreso % -->
+            <div class="space-y-1.5">
+                <div class="flex justify-between text-xs font-bold">
+                    <span class="text-slate-600" id="syncStepLabel">Procesando transacciones...</span>
+                    <span class="text-sky-700" id="syncPercentText">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
+                    <div id="syncProgressBar" class="bg-gradient-to-r from-sky-500 to-emerald-500 h-full rounded-full transition-all duration-200" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="syncSuccessState" class="hidden pt-2">
+                <button onclick="closeSyncProgressModal()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">
+                    ¡Listo! Abrir Panel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE SINCRONIZACIÓN POR TEXTO / WHATSAPP -->
+    <div id="syncTextModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">Sync WhatsApp / Texto</h3>
+                        <p class="text-[11px] text-slate-500">Mueve tus finanzas entre laptop y celular sin descargar archivos</p>
+                    </div>
+                </div>
+                <button onclick="closeSyncModal()" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <!-- Tabs de Exportar / Importar -->
+            <div class="flex border-b border-slate-200">
+                <button onclick="switchSyncTab('export')" id="btnSyncExport" class="flex-1 py-2 text-xs font-bold border-b-2 border-emerald-600 text-emerald-700">1. Copiar Código (Laptop/Cel)</button>
+                <button onclick="switchSyncTab('import')" id="btnSyncImport" class="flex-1 py-2 text-xs font-bold border-b-2 border-transparent text-slate-500">2. Pegar Código (Cargar)</button>
+            </div>
+
+            <!-- Panel 1: Exportar Texto -->
+            <div id="panelSyncExport" class="space-y-3">
+                <p class="text-xs text-slate-600">Haz clic en <strong>Copiar al Portapapeles</strong> y envíatelo por chat personal de WhatsApp:</p>
+                <textarea id="syncExportTextarea" readonly class="w-full h-36 bg-slate-50 text-[11px] text-slate-700 p-3 rounded-2xl border border-slate-300 focus:outline-none select-all font-mono"></textarea>
+                <button onclick="copySyncText()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 touch-target">
+                    <i class="fa-solid fa-copy"></i>
+                    <span>Copiar Código al Portapapeles</span>
+                </button>
+            </div>
+
+            <!-- Panel 2: Importar Texto -->
+            <div id="panelSyncImport" class="space-y-3 hidden">
+                <p class="text-xs text-slate-600">Pega aquí el código copiado de WhatsApp y presiona **Cargar Datos**:</p>
+                <textarea id="syncImportTextarea" placeholder="Pega el código de respaldo financiero aquí..." class="w-full h-36 bg-slate-50 text-[11px] text-slate-900 p-3 rounded-2xl border border-slate-300 focus:outline-none font-mono"></textarea>
+                <button onclick="applySyncText()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 touch-target">
+                    <i class="fa-solid fa-file-import"></i>
+                    <span>Iniciar Carga de Datos</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="appToast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center space-x-3 text-xs transition-all duration-300 transform translate-y-20 opacity-0 z-50">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toastMsg" class="font-bold">Mensaje del sistema</span>
+    </div>
+
+    <!-- LÓGICA DE APLICACIÓN EN JAVASCRIPT -->
+    <script>
+        // ESTADO INICIAL FINANCIERO POR DEFECTO
+        const INITIAL_FINANCE_STATE = {
+            transactions: [
+                { id: 1, type: 'income', amount: 4300, category: 'Sueldo SERUMS MINSA', description: 'Sueldo Mensual MINSA SERUMS', date: '2026-11-01' },
+                { id: 2, type: 'expense', amount: 150, category: 'Alimentación / Cuarto', description: 'Alquiler Cuarto Paucamarca', date: '2026-11-02' },
+                { id: 3, type: 'expense', amount: 35, category: 'Bitel / Servicios', description: 'Plan Móvil Bitel Mensual', date: '2026-11-03' },
+                { id: 4, type: 'expense', amount: 120, category: 'Cursos & Estudio RM', description: 'Plataforma Banqueo RM 2027', date: '2026-11-04' }
+            ],
+            recurring: [
+                { id: 101, title: 'Alquiler Cuarto Paucamarca', amount: 150, day: 15, category: 'Alimentación / Cuarto', paid: false },
+                { id: 102, title: 'Plan Bitel Mensual', amount: 35, day: 28, category: 'Bitel / Servicios', paid: true }
+            ]
+        };
+
+        const CATEGORIES_EXPENSE = [
+            'Alimentación / Cuarto',
+            'Transporte',
+            'Bitel / Servicios',
+            'Cursos & Estudio RM',
+            'Salud & Personal',
+            'Gustos / Varios',
+            'Otros'
+        ];
+
+        const CATEGORIES_INCOME = [
+            'Sueldo SERUMS MINSA',
+            'Ingresos Extra',
+            'Otros'
+        ];
+
+        let state = {};
+
+        window.onload = function() {
+            // Cargar estado guardado o inicializar
+            const saved = localStorage.getItem('serums_finances_cabin');
+            if (saved) {
+                try {
+                    state = JSON.parse(saved);
+                } catch(e) {
+                    state = INITIAL_FINANCE_STATE;
+                }
+            } else {
+                state = INITIAL_FINANCE_STATE;
+            }
+
+            // Fecha de hoy por defecto en formulario
+            document.getElementById('txDate').value = new Date().toISOString().slice(0, 10);
+
+            updateCategoryOptions();
+            renderAllViews();
+        };
+
+        function saveState() {
+            localStorage.setItem('serums_finances_cabin', JSON.stringify(state));
+            renderAllViews();
+        }
+
+        function toggleMobileNav() {
+            const sidebar = document.getElementById('sidebarNav');
+            sidebar.classList.toggle('hidden');
+        }
+
+        function switchView(viewId) {
+            document.querySelectorAll('.view-panel').forEach(panel => panel.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('nav-link-active'));
+
+            document.getElementById(viewId).classList.remove('hidden');
+            const btn = document.getElementById('btn-' + viewId);
+            if (btn) btn.classList.add('nav-link-active');
+
+            if (window.innerWidth < 640) {
+                document.getElementById('sidebarNav').classList.add('hidden');
+            }
+
+            if (viewId === 'v-dashboard') {
+                setTimeout(drawCanvasChart, 100);
+            }
+        }
+
+        function updateCategoryOptions() {
+            const selectedType = document.querySelector('input[name="txType"]:checked').value;
+            const catSelect = document.getElementById('txCategory');
+            catSelect.innerHTML = '';
+
+            const list = selectedType === 'income' ? CATEGORIES_INCOME : CATEGORIES_EXPENSE;
+            list.forEach(c => {
+                catSelect.innerHTML += `<option value="${c}">${c}</option>`;
+            });
+        }
+
+        // RENDERIZADO GLOBAL
+        function renderAllViews() {
+            renderDashboard();
+            renderHistoryTable();
+            renderRecurringPayments();
+        }
+
+        function renderDashboard() {
+            let totalIncome = 0;
+            let totalExpense = 0;
+            const categorySums = {};
+
+            state.transactions.forEach(t => {
+                if (t.type === 'income') {
+                    totalIncome += t.amount;
+                } else {
+                    totalExpense += t.amount;
+                    categorySums[t.category] = (categorySums[t.category] || 0) + t.amount;
+                }
+            });
+
+            const netBalance = totalIncome - totalExpense;
+            const savingsPct = totalIncome > 0 ? Math.max(0, ((netBalance / totalIncome) * 100)) : 0;
+
+            document.getElementById('cardNetBalance').textContent = `S/ ${netBalance.toFixed(2)}`;
+            document.getElementById('cardTotalIncome').textContent = `S/ ${totalIncome.toFixed(2)}`;
+            document.getElementById('cardTotalExpense').textContent = `S/ ${totalExpense.toFixed(2)}`;
+            document.getElementById('cardSavingsPct').textContent = `${savingsPct.toFixed(1)}%`;
+
+            // Sidebar Meter
+            document.getElementById('sidebarSavingsRate').textContent = `${savingsPct.toFixed(1)}%`;
+            document.getElementById('sidebarSavingsBar').style.width = `${Math.min(100, savingsPct)}%`;
+
+            // Render Categorías Bars
+            const barsContainer = document.getElementById('dashCategoryBars');
+            barsContainer.innerHTML = '';
+
+            CATEGORIES_EXPENSE.forEach(cat => {
+                const spent = categorySums[cat] || 0;
+                const pct = totalExpense > 0 ? Math.round((spent / totalExpense) * 100) : 0;
+
+                barsContainer.innerHTML += `
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-slate-700 font-bold">${cat}</span>
+                            <span class="text-slate-500 font-medium">S/ ${spent.toFixed(2)} (${pct}%)</span>
+                        </div>
+                        <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                            <div class="bg-sky-500 h-full rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Resumen Próximos Pagos
+            const upcomingList = document.getElementById('dashUpcomingPaymentsList');
+            upcomingList.innerHTML = '';
+            (state.recurring || []).forEach(r => {
+                upcomingList.innerHTML += `
+                    <div class="p-3 bg-white rounded-2xl border border-slate-200 flex items-center justify-between text-xs">
+                        <div>
+                            <div class="font-bold text-slate-800">${r.title}</div>
+                            <div class="text-[10px] text-slate-400">Vence el día ${r.day} de cada mes</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-rose-600">S/ ${r.amount.toFixed(2)}</div>
+                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full ${r.paid ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
+                                ${r.paid ? 'Pagado' : 'Pendiente'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            drawCanvasChart();
+        }
+
+        // DIBUJAR GRÁFICO CANVAS
+        function drawCanvasChart() {
+            const canvas = document.getElementById('financeCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const radius = Math.min(w, h) / 2.6;
+
+            ctx.clearRect(0, 0, w, h);
+
+            const categorySums = {};
+            let totalExpense = 0;
+
+            state.transactions.filter(t => t.type === 'expense').forEach(t => {
+                totalExpense += t.amount;
+                categorySums[t.category] = (categorySums[t.category] || 0) + t.amount;
+            });
+
+            if (totalExpense === 0) {
+                ctx.fillStyle = '#cbd5e1';
+                ctx.font = '12px Cabin';
+                ctx.textAlign = 'center';
+                ctx.fillText('Sin gastos registrados', cx, cy);
+                return;
+            }
+
+            const colors = ['#0284c7', '#059669', '#d97706', '#9333ea', '#e11d48', '#475569', '#f59e0b'];
+            let startAngle = 0;
+            let colorIdx = 0;
+
+            Object.keys(categorySums).forEach(cat => {
+                const val = categorySums[cat];
+                const sliceAngle = (val / totalExpense) * 2 * Math.PI;
+
+                ctx.beginPath();
+                ctx.fillStyle = colors[colorIdx % colors.length];
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, radius, startAngle, startAngle + sliceAngle);
+                ctx.closePath();
+                ctx.fill();
+
+                startAngle += sliceAngle;
+                colorIdx++;
+            });
+
+            // Círculo Central Donut
+            ctx.beginPath();
+            ctx.fillStyle = '#f8fafc';
+            ctx.arc(cx, cy, radius * 0.55, 0, 2 * Math.PI);
+            ctx.fill();
+
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 12px Cabin';
+            ctx.textAlign = 'center';
+            ctx.fillText('Total Gastos', cx, cy - 6);
+            ctx.fillStyle = '#e11d48';
+            ctx.font = 'bold 13px Cabin';
+            ctx.fillText(`S/ ${totalExpense.toFixed(0)}`, cx, cy + 12);
+        }
+
+        // REGISTRO DE NUEVA TRANSACCIÓN
+        function handleNewTransaction(e) {
+            e.preventDefault();
+            const type = document.querySelector('input[name="txType"]:checked').value;
+            const amount = parseFloat(document.getElementById('txAmount').value);
+            const date = document.getElementById('txDate').value;
+            const category = document.getElementById('txCategory').value;
+            const description = document.getElementById('txDescription').value.trim();
+
+            if (!amount || amount <= 0 || !description) {
+                showToast("Por favor ingresa un monto y descripción válidos.");
+                return;
+            }
+
+            const newTx = {
+                id: Date.now(),
+                type,
+                amount,
+                date,
+                category,
+                description
+            };
+
+            state.transactions.unshift(newTx);
+            saveState();
+
+            document.getElementById('txAmount').value = '';
+            document.getElementById('txDescription').value = '';
+
+            showToast("Transacción registrada correctamente.");
+            switchView('v-dashboard');
+        }
+
+        // RENDER HISTORIAL & FILTROS
+        function renderHistoryTable() {
+            const tbody = document.getElementById('historyTableBody');
+            const search = (document.getElementById('filterSearch').value || '').toLowerCase();
+            const typeFilter = document.getElementById('filterType').value;
+            const catFilter = document.getElementById('filterCategory').value;
+
+            tbody.innerHTML = '';
+
+            const filtered = state.transactions.filter(t => {
+                const matchSearch = t.description.toLowerCase().includes(search);
+                const matchType = typeFilter === 'all' || t.type === typeFilter;
+                const matchCat = catFilter === 'all' || t.category === catFilter;
+                return matchSearch && matchType && matchCat;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400">No se encontraron movimientos.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(t => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition-all">
+                        <td class="py-3 px-4 font-bold text-slate-700 whitespace-nowrap">${t.date}</td>
+                        <td class="py-3 px-4 font-bold text-slate-900">${t.description}</td>
+                        <td class="py-3 px-4">
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                                ${t.category}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 text-right font-bold ${t.type === 'income' ? 'text-emerald-600' : 'text-rose-600'}">
+                            ${t.type === 'income' ? '+' : '-'} S/ ${t.amount.toFixed(2)}
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <button onclick="deleteTransaction(${t.id})" class="p-1 text-slate-400 hover:text-rose-600 transition-all" title="Eliminar registro">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function deleteTransaction(id) {
+            state.transactions = state.transactions.filter(t => t.id !== id);
+            saveState();
+            showToast("Registro eliminado.");
+        }
+
+        function clearAllTransactions() {
+            if (confirm("¿Estás seguro de reiniciar todo el historial de transacciones?")) {
+                state.transactions = [];
+                saveState();
+                showToast("Historial vaciado.");
+            }
+        }
+
+        // PAGOS RECURRENTES
+        function renderRecurringPayments() {
+            const container = document.getElementById('recurringPaymentsContainer');
+            container.innerHTML = '';
+
+            if (!state.recurring || state.recurring.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-6 text-slate-400 text-xs">No hay pagos fijos configurados.</div>`;
+                return;
+            }
+
+            state.recurring.forEach(r => {
+                container.innerHTML += `
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-3 shadow-sm">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h3 class="font-bold text-xs text-slate-900">${r.title}</h3>
+                                <span class="text-[10px] text-slate-400 font-medium">${r.category}</span>
+                            </div>
+                            <button onclick="deleteRecurring(${r.id})" class="text-slate-300 hover:text-rose-600"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-rose-600">S/ ${r.amount.toFixed(2)}</span>
+                            <span class="text-[11px] text-slate-500 font-bold">Vence día ${r.day}</span>
+                        </div>
+
+                        <button onclick="toggleRecurringStatus(${r.id})" class="w-full py-2 rounded-xl text-xs font-bold transition-all ${r.paid ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}">
+                            ${r.paid ? '✓ Marcado como Pagado' : '⏳ Marcar como Pagado'}
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        function openAddRecurringModal() { document.getElementById('modalAddRecurring').classList.remove('hidden'); }
+        function closeAddRecurringModal() { document.getElementById('modalAddRecurring').classList.add('hidden'); }
+
+        function handleSaveRecurring(e) {
+            e.preventDefault();
+            const newR = {
+                id: Date.now(),
+                title: document.getElementById('recTitle').value.trim(),
+                amount: parseFloat(document.getElementById('recAmount').value),
+                day: parseInt(document.getElementById('recDay').value),
+                category: document.getElementById('recCat').value,
+                paid: false
+            };
+
+            if (!state.recurring) state.recurring = [];
+            state.recurring.push(newR);
+            saveState();
+
+            closeAddRecurringModal();
+            showToast("Pago recurrente guardado.");
+        }
+
+        function toggleRecurringStatus(id) {
+            const r = state.recurring.find(x => x.id === id);
+            if (r) {
+                r.paid = !r.paid;
+                saveState();
+            }
+        }
+
+        function deleteRecurring(id) {
+            state.recurring = state.recurring.filter(x => x.id !== id);
+            saveState();
+        }
+
+        // PROGRESO DE CÁRGA ANIMADO (% BARRA)
+        function startSyncProgress(newData) {
+            const modal = document.getElementById('syncProgressModal');
+            const bar = document.getElementById('syncProgressBar');
+            const percentText = document.getElementById('syncPercentText');
+            const stepLabel = document.getElementById('syncStepLabel');
+            const spinIcon = document.getElementById('syncSpinIcon');
+            const successState = document.getElementById('syncSuccessState');
+
+            modal.classList.remove('hidden');
+            successState.classList.add('hidden');
+            spinIcon.classList.add('animate-spin');
+
+            bar.style.width = '0%';
+            percentText.textContent = '0%';
+
+            let currentPct = 0;
+            const steps = [
+                { pct: 30, label: "Validando estructura de datos..." },
+                { pct: 65, label: "Actualizando saldo e historial SERUMS..." },
+                { pct: 90, label: "Generando resúmenes estadísticos..." },
+                { pct: 100, label: "¡Carga completada al 100%!" }
+            ];
+
+            let stepIdx = 0;
+            const interval = setInterval(() => {
+                if (stepIdx < steps.length) {
+                    const target = steps[stepIdx].pct;
+                    currentPct += 5;
+                    if (currentPct >= target) {
+                        currentPct = target;
+                        stepLabel.textContent = steps[stepIdx].label;
+                        stepIdx++;
+                    }
+                    bar.style.width = currentPct + '%';
+                    percentText.textContent = currentPct + '%';
+                } else {
+                    clearInterval(interval);
+                    state = Object.assign(state, newData);
+                    saveState();
+                    spinIcon.classList.remove('animate-spin');
+                    successState.classList.remove('hidden');
+                }
+            }, 70);
+        }
+
+        function closeSyncProgressModal() {
+            document.getElementById('syncProgressModal').classList.add('hidden');
+            switchView('v-dashboard');
+        }
+
+        // SINCRONIZACIÓN POR TEXTO / WHATSAPP MODAL
+        function openSyncModal() {
+            document.getElementById('syncExportTextarea').value = JSON.stringify(state, null, 2);
+            switchSyncTab('export');
+            document.getElementById('syncTextModal').classList.remove('hidden');
+        }
+
+        function closeSyncModal() {
+            document.getElementById('syncTextModal').classList.add('hidden');
+        }
+
+        function switchSyncTab(type) {
+            const expBtn = document.getElementById('btnSyncExport');
+            const impBtn = document.getElementById('btnSyncImport');
+            const expPan = document.getElementById('panelSyncExport');
+            const impPan = document.getElementById('panelSyncImport');
+
+            if (type === 'export') {
+                expBtn.className = "flex-1 py-2 text-xs font-bold border-b-2 border-emerald-600 text-emerald-700";
+                impBtn.className = "flex-1 py-2 text-xs font-bold border-b-2 border-transparent text-slate-500";
+                expPan.classList.remove('hidden');
+                impPan.classList.add('hidden');
+            } else {
+                impBtn.className = "flex-1 py-2 text-xs font-bold border-b-2 border-sky-600 text-sky-700";
+                expBtn.className = "flex-1 py-2 text-xs font-bold border-b-2 border-transparent text-slate-500";
+                impPan.classList.remove('hidden');
+                expPan.classList.add('hidden');
+            }
+        }
+
+        function copySyncText() {
+            const txt = document.getElementById('syncExportTextarea');
+            txt.select();
+            txt.setSelectionRange(0, 999999);
+            try {
+                document.execCommand('copy');
+                showToast("¡Código copiado! Pégalo en tu WhatsApp.");
+            } catch (err) {
+                showToast("Selecciona el código manualmente y presiona Copiar.");
+            }
+        }
+
+        function applySyncText() {
+            const raw = document.getElementById('syncImportTextarea').value.trim();
+            if (!raw) {
+                showToast("Por favor pega el código de respaldo primero.");
+                return;
+            }
+            try {
+                const parsed = JSON.parse(raw);
+                if (parsed && typeof parsed === 'object') {
+                    closeSyncModal();
+                    startSyncProgress(parsed);
+                }
+            } catch (e) {
+                showToast("El código ingresado no es válido.");
+            }
+        }
+
+        // ARCHIVOS JSON
+        function exportJSON() {
+            try {
+                const dataStr = JSON.stringify(state, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const anchor = document.createElement('a');
+                anchor.href = url;
+                anchor.download = `FINANZAS_SERUMS_${new Date().toISOString().slice(0,10)}.json`;
+                document.body.appendChild(anchor);
+                anchor.click();
+                setTimeout(() => {
+                    document.body.removeChild(anchor);
+                    URL.revokeObjectURL(url);
+                }, 100);
+                showToast("Archivo de respaldo JSON generado.");
+            } catch (err) {
+                showToast("Usa el botón 'Sync WhatsApp' en su lugar.");
+            }
+        }
+
+        function importJSON(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data && typeof data === 'object') {
+                        startSyncProgress(data);
+                    }
+                } catch (err) {
+                    showToast("No se pudo leer el archivo JSON.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('appToast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
